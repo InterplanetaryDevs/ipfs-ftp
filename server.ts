@@ -8,19 +8,14 @@ const options = {
 
 const fs = new IpfsFileSystem();
 const server = new FtpServer(options.host, {
-  getInitialCwd: function () {
-    return '/';
-  },
-  getRoot: function () {
-    return '/';
-  },
+  getInitialCwd: () => '/',
+  getRoot: () => '/',
   pasvPortRangeStart: 1025,
   pasvPortRangeEnd: 1050,
   tlsOptions: undefined,
   allowUnauthorizedTls: true,
   useWriteFile: true,
   useReadFile: true,
-  uploadMaxSlurpSize: 7000, // N/A unless 'useWriteFile' is true.
 });
 
 server.on('error', function (error) {

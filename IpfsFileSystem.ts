@@ -10,7 +10,6 @@ export class IpfsFileSystem {
   }
 
   writeFile(filename: string, data: any, options: any, callback: (err: any) => void) {
-    console.log(filename, data, options);
     this.node.files.write(this.normalizePath(filename), data, {
       create: true,
       parents: true,
@@ -44,7 +43,7 @@ export class IpfsFileSystem {
   }
 
   mkdir(dirpath: string, permissions: number, callback: (err: any) => void) {
-    this.node.files.mkdir(dirpath).then(callback).catch(callback);
+    this.node.files.mkdir(this.normalizePath(dirpath)).then(callback).catch(callback);
   }
 
   async readdir(path: string, callback: (err: any, contents: any) => void) {
@@ -53,6 +52,12 @@ export class IpfsFileSystem {
       files.push(file);
     }
     callback(undefined, files.map(f => f.name));
+  }
+
+  rename(fromPath: string, toPath: string, callback: (err: any) => void) {
+    this.node.files.mv(this.normalizePath(fromPath), this.normalizePath(toPath))
+      .then(callback)
+      .catch(callback)
   }
 
   private normalizePath(path: string): string {
