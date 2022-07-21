@@ -47,6 +47,14 @@ export class IpfsFileSystem {
     this.node.files.mkdir(dirpath).then(callback).catch(callback);
   }
 
+  async readdir(path: string, callback: (err: any, contents: any) => void) {
+    const files = [];
+    for await (const file of this.node.files.ls(this.normalizePath(path))) {
+      files.push(file);
+    }
+    callback(undefined, files.map(f => f.name));
+  }
+
   private normalizePath(path: string): string {
     return path.replace(/\\/g, '/');
   }
